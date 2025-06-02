@@ -1,103 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2D Dragon Crawler</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: black; }
-        canvas { border: 2px solid white; }
-    </style>
-</head>
-<body>
-    <canvas id="gameCanvas"></canvas>
-    <script>
-        // Select the Canvas
-        const canvas = document.getElementById("gameCanvas");
-        const ctx = canvas.getContext("2d");
+🐉 2D Dragon Crawler
+A simple 2D top-down canvas game built with HTML5 and JavaScript. Navigate your green dragon across the screen while avoiding red enemy dragons that chase you down!
 
-        // Game Constants
-        canvas.width = 800;
-        canvas.height = 600;
+🚀 Features
+Canvas-based rendering
 
-        const TILE_SIZE = 40;
-        const PLAYER_SPEED = 4;
-        const ENEMY_SPEED = 2;
+Player movement using arrow keys
 
-        // Player Object
-        const player = {
-            x: canvas.width / 2 - TILE_SIZE / 2,
-            y: canvas.height / 2 - TILE_SIZE / 2,
-            width: TILE_SIZE,
-            height: TILE_SIZE,
-            color: "green"
-        };
+Basic AI enemies that follow the player
 
-        // Enemy Object List
-        const enemies = [];
-        for (let i = 0; i < 5; i++) {
-            enemies.push({
-                x: Math.random() * (canvas.width - TILE_SIZE),
-                y: Math.random() * (canvas.height - TILE_SIZE),
-                width: TILE_SIZE,
-                height: TILE_SIZE,
-                color: "red"
-            });
-        }
+Clean UI with minimalist design
 
-        // Movement Input
-        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+Fully responsive canvas gameplay loop
 
-        document.addEventListener("keydown", (e) => {
-            if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
-        });
+🎮 How to Play
+Use the arrow keys to move the green dragon:
 
-        document.addEventListener("keyup", (e) => {
-            if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
-        });
+↑ Move Up
 
-        // Update Function
-        function update() {
-            // Player Movement
-            if (keys.ArrowLeft && player.x > 0) player.x -= PLAYER_SPEED;
-            if (keys.ArrowRight && player.x < canvas.width - TILE_SIZE) player.x += PLAYER_SPEED;
-            if (keys.ArrowUp && player.y > 0) player.y -= PLAYER_SPEED;
-            if (keys.ArrowDown && player.y < canvas.height - TILE_SIZE) player.y += PLAYER_SPEED;
+↓ Move Down
 
-            // Enemy AI (Chasing Player)
-            enemies.forEach(enemy => {
-                if (enemy.x < player.x) enemy.x += ENEMY_SPEED;
-                if (enemy.x > player.x) enemy.x -= ENEMY_SPEED;
-                if (enemy.y < player.y) enemy.y += ENEMY_SPEED;
-                if (enemy.y > player.y) enemy.y -= ENEMY_SPEED;
-            });
-        }
+← Move Left
 
-        // Draw Function
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+→ Move Right
 
-            // Draw Player
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+Avoid getting caught by the red enemy dragons!
 
-            // Draw Enemies
-            enemies.forEach(enemy => {
-                ctx.fillStyle = enemy.color;
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-            });
-        }
+🛠️ Technologies Used
+HTML5
 
-        // Game Loop
-        function gameLoop() {
-            update();
-            draw();
-            requestAnimationFrame(gameLoop);
-        }
+CSS3
 
-        // Start Game
-        gameLoop();
-    </script>
-</body>
-</html>
+JavaScript (Vanilla)
