@@ -1,2 +1,103 @@
-# 2d-dragon-crawler
-it is normal 2d dragon crawler game
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Dragon Crawler</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: black; }
+        canvas { border: 2px solid white; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        // Select the Canvas
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        // Game Constants
+        canvas.width = 800;
+        canvas.height = 600;
+
+        const TILE_SIZE = 40;
+        const PLAYER_SPEED = 4;
+        const ENEMY_SPEED = 2;
+
+        // Player Object
+        const player = {
+            x: canvas.width / 2 - TILE_SIZE / 2,
+            y: canvas.height / 2 - TILE_SIZE / 2,
+            width: TILE_SIZE,
+            height: TILE_SIZE,
+            color: "green"
+        };
+
+        // Enemy Object List
+        const enemies = [];
+        for (let i = 0; i < 5; i++) {
+            enemies.push({
+                x: Math.random() * (canvas.width - TILE_SIZE),
+                y: Math.random() * (canvas.height - TILE_SIZE),
+                width: TILE_SIZE,
+                height: TILE_SIZE,
+                color: "red"
+            });
+        }
+
+        // Movement Input
+        const keys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+        document.addEventListener("keydown", (e) => {
+            if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
+        });
+
+        document.addEventListener("keyup", (e) => {
+            if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
+        });
+
+        // Update Function
+        function update() {
+            // Player Movement
+            if (keys.ArrowLeft && player.x > 0) player.x -= PLAYER_SPEED;
+            if (keys.ArrowRight && player.x < canvas.width - TILE_SIZE) player.x += PLAYER_SPEED;
+            if (keys.ArrowUp && player.y > 0) player.y -= PLAYER_SPEED;
+            if (keys.ArrowDown && player.y < canvas.height - TILE_SIZE) player.y += PLAYER_SPEED;
+
+            // Enemy AI (Chasing Player)
+            enemies.forEach(enemy => {
+                if (enemy.x < player.x) enemy.x += ENEMY_SPEED;
+                if (enemy.x > player.x) enemy.x -= ENEMY_SPEED;
+                if (enemy.y < player.y) enemy.y += ENEMY_SPEED;
+                if (enemy.y > player.y) enemy.y -= ENEMY_SPEED;
+            });
+        }
+
+        // Draw Function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw Player
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+
+            // Draw Enemies
+            enemies.forEach(enemy => {
+                ctx.fillStyle = enemy.color;
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+            });
+        }
+
+        // Game Loop
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start Game
+        gameLoop();
+    </script>
+</body>
+</html>
